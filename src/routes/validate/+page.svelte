@@ -1,5 +1,4 @@
 <script>
-    
 	let url = 'http://localhost:8010/v1/documents/validation';
 
 	let selectedOption = 'LDO';
@@ -33,59 +32,60 @@
 		workflowInstanceId = deserializedJson.workflowInstanceId;
 		isLoading = false;
 	}
- 
 </script>
 
-
-	{#if isLoading}
-		<div
-			class="overflow-hidden w-screen h-screen  absolute bg-gray-800/40 p-0 z-50 grid place-content-center items-center content-center"
-		>
-			<div class="spin">
-				<div />
-				<div />
-				<div />
-				<div />
-			</div>
-		</div>
-	{/if}
-	<div class="prose m-auto p-4 pt-20 w-full">
-		<h1 class="py-4 prose">VALIDAZIONE</h1>
-		<div>
-			<form on:submit|preventDefault={handleSubmit} class="rounded-lg shadow-md p-4">
-				<label class="block mb-2">
-					Tipo Documento:
-					<select
-						bind:value={selectedOption}
-						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-					>
-						{#each options as { value, text }}
-							<option {value}>{text}</option>
-						{/each}
-					</select>
-				</label>
-
-				<br />
-				<label class="block mb-2">
-					Url:
-					<input
-						type="text"
-						bind:value={url}
-						class="w-full py-2 px-4 mb-4   rounded-md border border-gray-300"
-					/>
-				</label>
-				<br />
-				<button type="submit" class="w-full py-2 px-4 mb-4    rounded-md bg-green-500 text-white"
-					>Submit</button
-				>
-			</form>
-		</div>
-		<h1 class="prose py-4">WORKFLOW INSTANCE ID</h1>
-		<div class="grid grid-cols-2">
-			<input
-				type="text"
-				bind:value={workflowInstanceId}
-				class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5"
-			/>
+{#if isLoading}
+	<div
+		class="overflow-hidden w-screen h-screen  absolute bg-gray-800/40 p-0 z-50 grid place-content-center items-center content-center"
+	>
+		<div class="spin">
+			<div />
+			<div />
+			<div />
+			<div />
 		</div>
 	</div>
+{/if}
+<div class="prose m-auto p-4 pt-20 w-full">
+	<h1 class="py-4 prose">VALIDATION</h1>
+	<form on:submit|preventDefault={handleSubmit} class="rounded-lg shadow-md p-4 grid">
+		<label class="block mb-2">
+			Document Type:
+			<select
+				bind:value={selectedOption}
+				class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+			>
+				{#each options as { value, text }}
+					<option {value}>{text}</option>
+				{/each}
+			</select>
+		</label>
+
+		<br />
+		<label class="block mb-2">
+			Url:
+			<input
+				type="text"
+				bind:value={url}
+				class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+			/>
+		</label>
+		<br />
+		<div class="p-4 text-center grid place-content-center content-center grid-flow-col gap-2">
+			<button
+				type="submit"
+				class="rounded-md bg-green-500 text-white font-mono hover:bg-green-600 h-10 w-24"
+				>Validate</button
+			>
+		</div>
+	</form>
+	<div class="grid grid-cols-3">
+		<h1 class="prose py-4 col-span-2">WORKFLOW INSTANCE ID</h1>
+		<div class="col-span-1" />
+		<input
+			type="text"
+			bind:value={workflowInstanceId}
+			class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 "
+		/>
+	</div>
+</div>

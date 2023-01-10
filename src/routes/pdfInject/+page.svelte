@@ -45,32 +45,38 @@
 </script>
 
 <div class="pt-32">
-	<div class="relative rounded-md shadow-sm">
-		<input
-			type="file"
-			accept="*/*"
-			on:change={handleFileInput}
-			class="form-input py-2 px-3 block w-full leading-5 rounded-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-		/>
-		<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-			<span class="text-gray-500 sm:text-sm sm:leading-5">
-				{fileName || 'Choose a file...'}
-			</span>
+	<div class="grid p-4 items-center text-center place-content-center content-center">
+		<div class="rounded-md shadow-sm bg-gray-300">
+			<input
+				type="file"
+				accept="*/*"
+				on:change={handleFileInput}
+				class="p-6 rounded-lg font-bold font-mono"
+			/>
 		</div>
 	</div>
-
-	<div class="mt-5">
-		<button class="btn py-2 px-4 rounded-lg" on:click={handleUpload}> Upload </button>
-		<button class="btn-secondary ml-3 py-2 px-4 rounded-lg" on:click={handleCancel}> Cancel </button>
+	<div class="p-4 text-center grid place-content-center content-center grid-flow-col gap-2">
+		<button
+			class="rounded-md bg-green-500 text-white font-mono hover:bg-green-600 h-10 w-20"
+			on:click={handleUpload}
+		>
+			Upload
+		</button>
+		<button class="w-auto h-auto hover:text-red-500 text-end" on:click={handleCancel}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				><polyline points="3 6 5 6 21 6" /><path
+					d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+				/><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg
+			>
+		</button>
 	</div>
 </div>
-
-<style>
-	.btn {
-		@apply text-white bg-blue-500;
-	}
-
-	.btn-secondary {
-		@apply text-blue-700 bg-white;
-	}
-</style>

@@ -46,13 +46,13 @@
 				<li>
 					<div class="item">
 						<p class="text-amber-300">02.</p>
-						<a href="/jwtGenerator" class="text-white hover:text-amber-300">Creazione Jwt</a>
+						<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
 					</div>
 				</li>
 				<li>
 					<div class="item">
 						<p class="text-amber-300">03.</p>
-						<a href="/validate" class="text-white hover:text-amber-300">Validazione</a>
+						<a href="/validate" class="text-white hover:text-amber-300">Validation</a>
 					</div>
 				</li>
 			</ul>
