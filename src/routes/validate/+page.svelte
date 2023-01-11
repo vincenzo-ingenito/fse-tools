@@ -51,10 +51,7 @@
 	<form on:submit|preventDefault={handleSubmit} class="rounded-lg shadow-md p-4 grid">
 		<label class="block mb-2">
 			Document Type:
-			<select
-				bind:value={selectedOption}
-				class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-			>
+			<select bind:value={selectedOption} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
 				{#each options as { value, text }}
 					<option {value}>{text}</option>
 				{/each}

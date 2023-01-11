@@ -37,6 +37,11 @@
 	<div class="flex justify-end items-center w-full h-20">
 		<nav>
 			<ul class="gap-2 hidden md:flex mr-10" aria-label="Navigation">
+				<li>
+					<div class="item">
+						<a href="/" class="text-white hover:text-amber-300">Home</a>
+					</div>
+				</li>
                 <li>
 					<div class="item">
 						<p class="text-amber-300">01.</p>
