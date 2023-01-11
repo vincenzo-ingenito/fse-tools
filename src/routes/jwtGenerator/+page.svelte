@@ -4,11 +4,11 @@
 	import { action_id_enum } from './action_id.js';
 	import { subj_app_id } from './subj_app_id.js';
 	let selectedOption;
-	
+
 	let action_id = '';
 	let subject_role = '';
 	let purpose_of_use = '';
-	 
+
 	let p12Alias = '';
 	let p12PWD = '';
 	let pdf;
@@ -17,10 +17,10 @@
 	let fileNameP12 = '';
 	let pem;
 	let fileNamePem = '';
- 
+
 	//DATA JSON START
 	let sub = 'SSSMNN75B01F257L^^^&amp;2.16.840.1.113883.2.9.4.3.2&amp;ISO';
-	 
+
 	let iss = 'S1#190201234567XX';
 	let locality = '201123456';
 	let subject_application_id = 'GTW';
@@ -94,7 +94,9 @@
 
 <div>
 	{#if isLoading}
-		<div class="overflow-hidden w-full h-full absolute bg-gray-800/40 p-0 z-50 grid place-content-center items-center content-center" >
+		<div
+			class="overflow-hidden w-full h-full absolute bg-gray-800/40 p-0 z-50 grid place-content-center items-center content-center"
+		>
 			<div class="spin">
 				<div />
 				<div />
@@ -104,102 +106,150 @@
 		</div>
 	{/if}
 
-	<div class="prose p-4 pt-20">
-		<h1 class="pt-4 prose text-2xl font-mono text-center">JWT Generation</h1>
+	<div class="p-4 pt-20 md:w-3/4 mx-auto">
+		<h1 class="pt-4 text-gray-700 text-2xl font-mono font-extrabold text-center mb-5">JWT Generation</h1>
 		<form on:submit|preventDefault={handleSubmit}>
-			<div class="rounded-lg shadow-md px-4 font-mono border">
-				<h2 class="prose text-xl font-mono text-center mt-2">Data JWT</h2>
-				<label>
-					P12 Alias:
-					<input type="text" bind:value={p12Alias} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"/>
-				</label>
-				<br />
-				<label>
-					P12 Pwd:
-					<input type="password" bind:value={p12PWD} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"/>
-				</label>
-			</div>
-			<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border">
-				<h2 class="prose text-xl font-mono text-center mt-4 col-span-3">Files</h2>
-				<span class="col-span-1">PDF</span>
-				<input type="file" accept="*/*" on:change={handleFilePdf} class="px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2" />
-				<span class="col-span-1">P12</span>
-				<input type="file" accept="*/*" on:change={handleFileInputP12} class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2" />
-				<span class="col-span-1">PEM</span>
-				<input
-					type="file"
-					accept="*/*"
-					on:change={handleFileInputPem}
-					class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
-				/>
-			</div>
-
-			<div
-				class="grid grid-cols-2 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"
-			>
-				<h2 class="prose text-xl font-mono text-center mt-4 col-span-2">Data Json</h2>
-
-				<label for="sub">Subject</label>
-				<input type="text" id="sub" bind:value={sub} />
-
-				<label for="subject_role_enum">Subject role</label>
-				<select bind:value={subject_role} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
-					{#each subject_role_enum as { value, text }}
-						<option {value}>{value} - {text}</option>
-					{/each}
-				</select>
-				<label for="purpose_of_use_enum">Purpose of use</label>
-				<select bind:value={purpose_of_use} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
-					{#each purpose_of_use_enum as { value, text }}
-						<option {value}>{value} - {text}</option>
-					{/each}
-				</select>
-
-				<label for="iss">Issuer</label>
-				<input type="text" id="iss" bind:value={iss} />
-				<label for="locality">Locality</label>
-				<input type="text" id="locality" bind:value={locality} />
-				<label for="subject_application_id">Subject application id</label>
-				<input type="text" id="subject_application_id" bind:value={subject_application_id} />
-				<label for="subject_application_vendor">Subject application vendor</label>
-				<input type="text" id="subject_application_vendor" bind:value={subject_application_vendor} />
-				<label for="subject_application_version">Subject application version</label>
-				<input type="text" id="subject_application_version" bind:value={subject_application_version} />
-
-				<label for="subject_organization">Subject organization</label>
-				<select bind:value={selectedOption} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
-					{#each subj_app_id as { value, text, organization, organization_id }}
-						<option value={{ organization_id, organization }}>{value} - {text}</option>
-					{/each}
-				</select>
-
-				<label for="aud">aud</label>
-				<input type="text" id="aud" bind:value={aud} />
-				<label for="patient_consent">Patient consent</label>
-				<input type="checkbox" id="patient_consent" bind:value={patient_consent} />
-				<label for="jti">jti</label>
-				<input type="text" id="jti" bind:value={jti} />
-
-				<label for="action_id_enum">Action id</label>
-				<select
-					bind:value={action_id}
-					class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+			<div class="grid grid-cols-2 gap-2">
+				<div class="rounded-lg shadow-md px-4 font-mono border">
+					<h2 class="text-xl font-mono text-center mt-2">Data JWT</h2>
+					<label>
+						P12 Alias:
+						<input
+							type="text"
+							bind:value={p12Alias}
+							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+						/>
+					</label>
+					<br />
+					<label>
+						P12 Pwd:
+						<input
+							type="password"
+							bind:value={p12PWD}
+							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+						/>
+					</label>
+				</div>
+				<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border">
+					<h2 class="text-xl font-mono text-center mt-4 col-span-3">Files</h2>
+					<span class="col-span-1">PDF</span>
+					<input
+						type="file"
+						accept="*/*"
+						on:change={handleFilePdf}
+						class="px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
+					/>
+					<span class="col-span-1">P12</span>
+					<input
+						type="file"
+						accept="*/*"
+						on:change={handleFileInputP12}
+						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
+					/>
+					<span class="col-span-1">PEM</span>
+					<input
+						type="file"
+						accept="*/*"
+						on:change={handleFileInputPem}
+						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
+					/>
+				</div>
+				<div
+					class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-5 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"
 				>
-					{#each action_id_enum as { value, text }}
-						<option {value}>{text}</option>
-					{/each}
-				</select>
+					<h2 class="text-xl font-mono text-center mt-4 col-span-full">
+						Data Json
+					</h2>
 
-				<label for="person_id">Person id</label>
-				<input type="text" id="person_id" bind:value={person_id} />
-			</div>
+					<label for="sub">Subject</label>
+					<input type="text" id="sub" bind:value={sub} />
 
-			<div class="p-4 text-center grid place-content-center content-center grid-flow-col gap-2">
-				<button
-					type="submit"
-					class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-20 m-4"
-					>Submit</button
+					<div class="hidden md:flex md:col-span-1"/>
+
+					<label for="subject_role_enum">Subject role</label>
+					<select
+						bind:value={subject_role}
+						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+					>
+						{#each subject_role_enum as { value, text }}
+							<option {value}>{value} - {text}</option>
+						{/each}
+					</select>
+					<label for="purpose_of_use_enum">Purpose of use</label>
+					<select
+						bind:value={purpose_of_use}
+						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+					>
+						{#each purpose_of_use_enum as { value, text }}
+							<option {value}>{value} - {text}</option>
+						{/each}
+					</select>
+					<div class="hidden md:flex md:col-span-1"/>
+
+					<label for="iss">Issuer</label>
+					<input type="text" id="iss" bind:value={iss} />
+					<label for="locality">Locality</label>
+					<input type="text" id="locality" bind:value={locality} />
+					<div class="hidden md:flex md:col-span-1"/>
+					<label for="subject_application_id">Subject application id</label>
+					<input type="text" id="subject_application_id" bind:value={subject_application_id} />
+					<label for="subject_application_vendor">Subject application vendor</label>
+					<input
+						type="text"
+						id="subject_application_vendor"
+						bind:value={subject_application_vendor}
+					/>
+					<div class="hidden md:flex md:col-span-1"/>
+					<label for="subject_application_version">Subject application version</label>
+					<input
+						type="text"
+						id="subject_application_version"
+						bind:value={subject_application_version}
+					/>
+
+					<label for="subject_organization">Subject organization</label>
+					<select
+						bind:value={selectedOption}
+						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+					>
+						{#each subj_app_id as { value, text, organization, organization_id }}
+							<option value={{ organization_id, organization }}>{value} - {text}</option>
+						{/each}
+					</select>
+
+					<div class="hidden md:flex md:col-span-1"/>
+					<label for="aud">aud</label>
+					<input type="text" id="aud" bind:value={aud} />
+					<label for="patient_consent">Patient consent</label>
+					<input type="checkbox" id="patient_consent" bind:value={patient_consent} />
+					<div class="hidden md:flex md:col-span-1"/>
+					<label for="jti">jti</label>
+					<input type="text" id="jti" bind:value={jti} />
+
+					<label for="action_id_enum">Action id</label>
+					<select
+						bind:value={action_id}
+						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
+					>
+						{#each action_id_enum as { value, text }}
+							<option {value}>{text}</option>
+						{/each}
+					</select>
+
+					<div class="hidden md:flex hidden md:flex md:col-span-1"/>
+					<label for="person_id">Person id</label>
+					<input type="text" id="person_id" bind:value={person_id} />
+				</div>
+
+				<div
+					class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2"
 				>
+					<button
+						type="submit"
+						class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-20 m-4"
+						>Submit</button
+					>
+				</div>
 			</div>
 		</form>
 
@@ -213,7 +263,11 @@
 			/>
 
 			<span class="col-span-1">Signature</span>
-			<input type="text" bind:value={signature} class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2" />
+			<input
+				type="text"
+				bind:value={signature}
+				class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2"
+			/>
 		</div>
 	</div>
 </div>

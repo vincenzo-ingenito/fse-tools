@@ -34,35 +34,43 @@
 </script>
 
 <header class={headerClasses}>
-	<div class="flex justify-end items-center w-full h-20">
+	<div class="w-full h-20">
 		<nav>
-			<ul class="gap-2 hidden md:flex mr-10" aria-label="Navigation">
-				<li>
-					<div class="item">
-						<a href="/" class="text-white hover:text-amber-300">Home</a>
-					</div>
-				</li>
-                <li>
-					<div class="item">
-						<p class="text-amber-300">01.</p>
-						<a href="/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a>
-					</div>
-				</li>
-				<li>
-					<div class="item">
-						<p class="text-amber-300">02.</p>
-						<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
-					</div>
-				</li>
-				<li>
-					<div class="item">
-						<p class="text-amber-300">03.</p>
-						<a href="/validate" class="text-white hover:text-amber-300">Validation</a>
-					</div>
-				</li>
-			</ul>
+			<div class="hidden md:grid grid-cols-6 items-center h-20">
+				<div class="flex justify-start col-span-1">
+					<ul class="hidden md:flex ml-5">
+						<li>
+							<div class="item">
+								<a href="/" class="text-white hover:text-amber-300 font-extrabold">Home</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="col-span-5 flex justify-end">
+					<ul class="gap-2 md:flex mr-10" aria-label="Navigation">
+						<li>
+							<div class="item">
+								<p class="text-amber-300">01.</p>
+								<a href="/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<p class="text-amber-300">02.</p>
+								<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<p class="text-amber-300">03.</p>
+								<a href="/validate" class="text-white hover:text-amber-300">Validation</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</nav>
-		<div class="md:hidden absolute">
+		<div class="md:hidden absolute w-full flex flex-row-reverse right-5 top-3">
 			{#if !mobileMenuOpen}
 				<button
 					class="flex items-center rounded top-0 right-0 text-amber-300"
