@@ -8,7 +8,7 @@
 	let action_id = 'CREATE';
 	let purpose_of_use = 'TREATMENT';
 	let subject_role = 'AAS';
-	
+	let selectedOptionSistema = 'Gateway';
 
 	let p12Alias = '';
 	$: isValidP12Alias = true; 
@@ -120,6 +120,10 @@
 		return jti.length > 0;
 	}
 
+	function handleChangeSistema(event) {
+		selectedOptionSistema = event.target.value;
+  }
+
 	//DATA JSON END
 
 	const handleFilePdf = (/** @type {{ target: { files: (string | Blob)[]; }; }} */ event) => {
@@ -216,19 +220,16 @@
 		<form on:submit|preventDefault={handleSubmit}>
 			<div class="grid grid-cols-2 gap-2">
 				<div class="rounded-lg shadow-md px-4 font-mono border">
-					<h2 class="text-xl font-mono text-center mt-2">Data JWT</h2>
+					<h2 class="text-xl font-mono text-center mt-2">Certificato di Firma</h2>
 					<label
-						>P12 Alias:
-						<input
-							type="text"
-							bind:value={p12Alias}
-							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-							style="border-color:{!isValidP12Alias ? 'red' : 'black'}"
-						/>
+						>P12 Signature:
+						<input required
+						type="file" accept="*/*" on:change={handleFileInputP12}
+						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"/>
 					</label>
 					<br />
 					<label
-						>P12 Pwd:
+						>P12 Password:
 						<input
 							type="password"
 							bind:value={p12PWD}
@@ -238,101 +239,97 @@
 					</label>
 				</div>
 				<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border">
-					<h2 class="text-xl font-mono text-center mt-4 col-span-3">Files</h2>
-					<span class="col-span-1">PDF</span>
-					<input required type="file"
-						accept="*/*" on:change={handleFilePdf} class="px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
-					/>
-					 
-					<span class="col-span-1">P12</span>
-					<input required
-						type="file" accept="*/*" on:change={handleFileInputP12}
-						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"/>
-					<span class="col-span-1">PEM</span>
-					<input
-						required
-						type="file"
-						accept="*/*"
-						on:change={handleFileInputPem}
-						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
-					/>
-				</div>
-				<div
-					class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-5 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"
-				>
-					<h2 class="text-xl font-mono text-center mt-4 col-span-full">Data Json</h2>
+  <h2 class="text-xl font-mono text-center mt-4 col-span-3">Sistema Target</h2>
+  
+  <span class="col-span-1 flex items-center">Select Option:</span>
+  <select bind:value={selectedOptionSistema} on:change={handleChangeSistema} class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2">
+    <option value="Gateway">Gateway</option>
+    <option value="Provisioning">Provisioning</option>
+    <option value="Monitoring">Monitoring</option>
+    <option value="Terminology">Terminology</option>
+  </select>
+</div>
 
-					<label for="sub">Subject</label>
-					<input type="text" id="sub" bind:value={sub} style="border-color:{!isValidSub ? 'red' : 'black'}"/>
+<div class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-5 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center">
+  <h2 class="text-xl font-mono text-center mt-4 col-span-full">Data Json</h2>
 
-					<div class="hidden md:flex md:col-span-1" />
+  <label for="sub">Subject</label>
+  <input type="text" id="sub" bind:value={sub} style="border-color:{!isValidSub ? 'red' : 'black'}"/>
 
-					<label for="subject_role_enum">Subject role</label>
-					<select bind:value={subject_role} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
-						{#each subject_role_enum as { value, text }}
-							<option {value}>{value} - {text}</option>
-						{/each}
-					</select>
-					<label for="purpose_of_use_enum">Purpose of use</label>
-					<select bind:value={purpose_of_use} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
-						{#each purpose_of_use_enum as { value, text }}
-							<option {value}>{value} - {text}</option>
-						{/each}
-					</select>
-					<div class="hidden md:flex md:col-span-1" />
+   
+    <div class="hidden md:flex md:col-span-1" />
 
-					<label for="iss">Issuer</label>
-					<input type="text" id="iss" bind:value={iss} style="border-color:{!isValidIssuer ? 'red' : 'black'}" />
+    <label for="subject_role_enum">Subject role</label>
+    <select bind:value={subject_role} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
+      {#each subject_role_enum as { value, text }}
+        <option {value}>{value} - {text}</option>
+      {/each}
+    </select>
 
-					<label for="locality">Locality</label>
-					<input type="text" id="locality" bind:value={locality} style="border-color:{!isValidLocality ? 'red' : 'black'}"/>
+    <label for="purpose_of_use_enum">Purpose of use</label>
+    <select bind:value={purpose_of_use} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
+      {#each purpose_of_use_enum as { value, text }}
+        <option {value}>{value} - {text}</option>
+      {/each}
+    </select>
 
-					<div class="hidden md:flex md:col-span-1" />
+    <div class="hidden md:flex md:col-span-1" />
 
-					<label for="subject_application_id">Subject application id</label>
-					<input type="text" id="subject_application_id" bind:value={subject_application_id} style="border-color:{!isValidSubAppId ? 'red' : 'black'}" />
+    <label for="iss">Issuer</label>
+    <input type="text" id="iss" bind:value={iss} style="border-color:{!isValidIssuer ? 'red' : 'black'}"/>
 
-					<label for="subject_application_vendor">Subject application vendor</label>
-					<input type="text" id="subject_application_vendor" bind:value={subject_application_vendor} style="border-color:{!isValidSubAppVendor ? 'red' : 'black'}"/>
-					<div class="hidden md:flex md:col-span-1" />
+    {#if selectedOptionSistema !== 'Monitoring' && selectedOptionSistema !== 'Terminology'}
+      <label for="locality">Locality</label>
+      <input type="text" id="locality" bind:value={locality} style="border-color:{!isValidLocality ? 'red' : 'black'}"/>
+    {/if}
 
-					<label for="subject_application_version">Subject application version</label>
-					<input type="text" id="subject_application_version" bind:value={subject_application_version} style="border-color:{!isValidSubAppVersion ? 'red' : 'black'}"/>
+    <div class="hidden md:flex md:col-span-1" />
 
-					<label for="subject_organization">Subject organization</label>
-					<select bind:value={selectedOption} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
-						{#each subj_app_id as { value, text, organization, organization_id }}
-							<option value={{ organization_id, organization }}>{value} - {text}</option>
-						{/each}
-					</select>
+    <label for="subject_application_id">Subject application id</label>
+    <input type="text" id="subject_application_id" bind:value={subject_application_id} style="border-color:{!isValidSubAppId ? 'red' : 'black'}"/>
 
-					<div class="hidden md:flex md:col-span-1" />
-					<label for="aud">aud</label>
-					<input type="text" id="aud" bind:value={aud} style="border-color:{!isValidAud ? 'red' : 'black'}"/>
+    <label for="subject_application_vendor">Subject application vendor</label>
+    <input type="text" id="subject_application_vendor" bind:value={subject_application_vendor} style="border-color:{!isValidSubAppVendor ? 'red' : 'black'}"/>
 
-					<label for="patient_consent">Patient consent</label>
-					<input type="checkbox" id="patient_consent" bind:value={patient_consent}/>
+    <div class="hidden md:flex md:col-span-1" />
 
-					<div class="hidden md:flex md:col-span-1" />
-					<label for="jti">jti</label>
-					<input type="text" id="jti" bind:value={jti} style="border-color:{!isValidJTI ? 'red' : 'black'}" />
+    <label for="subject_application_version">Subject application version</label>
+    <input type="text" id="subject_application_version" bind:value={subject_application_version} style="border-color:{!isValidSubAppVersion ? 'red' : 'black'}"/>
 
-					<label for="action_id_enum">Action id</label>
-					<select bind:value={action_id} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
-						{#each action_id_enum as { value, text }}
-							<option {value}>{text}</option>
-						{/each}
-					</select>
+    <label for="subject_organization">Subject organization</label>
+    <select bind:value={selectedOption} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
+      {#each subj_app_id as { value, text, organization, organization_id }}
+        <option value={{ organization_id, organization }}>{value} - {text}</option>
+      {/each}
+    </select>
 
-					<div class="hidden md:flex hidden md:flex md:col-span-1" />
-				</div>
+    <div class="hidden md:flex md:col-span-1" />
+    <label for="aud">aud</label>
+    <input type="text" id="aud" bind:value={aud} style="border-color:{!isValidAud ? 'red' : 'black'}"/>
 
-				<div class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2">
-					<button type="submit" class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4">
-						GENERA JWT
-					</button
-					>
-				</div>
+    <label for="patient_consent">Patient consent</label>
+    <input type="checkbox" id="patient_consent" bind:value={patient_consent}/>
+
+    <div class="hidden md:flex md:col-span-1" />
+    <label for="jti">jti</label>
+    <input type="text" id="jti" bind:value={jti} style="border-color:{!isValidJTI ? 'red' : 'black'}" />
+
+    <label for="action_id_enum">Action id</label>
+    <select bind:value={action_id} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
+      {#each action_id_enum as { value, text }}
+        <option {value}>{text}</option>
+      {/each}
+    </select>
+
+    <div class="hidden md:flex hidden md:flex md:col-span-1" />
+  
+</div>
+
+<div class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2">
+  <button type="submit" class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4">
+    GENERA JWT
+  </button>
+</div>
 			</div>
 		</form>
 

@@ -50,6 +50,12 @@
 					<ul class="gap-2 md:flex mr-10" aria-label="Navigation">
 						<li>
 							<div class="item">
+								<p class="text-amber-300">00.</p>
+								<a href="/github" class="text-white hover:text-amber-300">Git</a>
+							</div>
+						</li>
+						<li>
+							<div class="item">
 								<p class="text-amber-300">01.</p>
 								<a href="/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a>
 							</div>
@@ -58,12 +64,6 @@
 							<div class="item">
 								<p class="text-amber-300">02.</p>
 								<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
-							</div>
-						</li>
-						<li>
-							<div class="item">
-								<p class="text-amber-300">03.</p>
-								<a href="/validate" class="text-white hover:text-amber-300">Validation</a>
 							</div>
 						</li>
 					</ul>
@@ -121,12 +121,12 @@
 						<div class="item">
 							<p class="text-amber-300">01.</p>
 							<a
-								href="/validate"
+								href="/github"
 								class="text-white hover:text-amber-300"
-								on:click={handleMobileMenuClose}>validate</a
+								on:click={handleMobileMenuClose}>github</a
 							>
 						</div>
-					</li>
+					</li> 
 					<li>
 						<div class="item">
 							<p class="text-amber-300">02.</p>
@@ -146,7 +146,7 @@
 								on:click={handleMobileMenuClose}>pdfInject</a
 							>
 						</div>
-					</li>
+					</li> 
 				</ul>
 			</nav>
 		</div>
