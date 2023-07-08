@@ -133,10 +133,8 @@
 		pdf = event.target.files[0];
 		fileNamePdf = pdf.name;
 	};
-	const handleFileInputP12 = (event) => {
-		p12 = event.target.files[0];
-		fileNameP12 = p12.name;
-	};
+	
+	
 	function handleFileInputPem(event) {
 		const file = event.target.files[0];
 		console.log('File pem:' + file);
@@ -220,7 +218,7 @@
 	async function rsaSHA256(privateKeyPem) {
 		const alg = 'RS256';
 		const typ = 'JWT';
-		const x5c = pemContent;
+		const x5c = [pemContent];
 		const privateKey1 = await jose.importPKCS8(privateKeyPem, alg);
 		const jwt = await new jose.SignJWT({})
 			.setProtectedHeader({ alg, typ, x5c })
