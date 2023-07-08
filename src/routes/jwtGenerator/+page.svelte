@@ -3,8 +3,11 @@
 	import { purpose_of_use_enum } from './purpose_of_use.js';
 	import { action_id_enum } from './action_id.js';
 	import { subj_app_id } from './subj_app_id.js';
-	let selectedOption;
+	import * as jose from 'jose';
 
+	let selectedOption;
+	let pemContent;
+	let privKeyContent;
 	let action_id = 'CREATE';
 	let purpose_of_use = 'TREATMENT';
 	let subject_role = 'AAS';
@@ -134,13 +137,40 @@
 		p12 = event.target.files[0];
 		fileNameP12 = p12.name;
 	};
-	const handleFileInputPem = (event) => {
-		pem = event.target.files[0];
-		fileNamePem = pem.name;
-	};
+	function handleFileInputPem(event) {
+		const file = event.target.files[0];
+		console.log('File pem:' + file);
+		const reader = new FileReader();
+
+		reader.onload = function (event) {
+			pemContent = cleanPem(event.target.result);
+		};
+
+		reader.onerror = function (event) {
+			console.error('Error reading the file');
+		};
+
+		reader.readAsText(file);
+	}
+
+	function handlePrivateKey(event) {
+		const file = event.target.files[0];
+		const reader = new FileReader();
+
+		reader.onload = function (event) {
+			privKeyContent = event.target.result;
+		};
+
+		reader.onerror = function (event) {
+			console.error('Error reading the file');
+		};
+
+		reader.readAsText(file);
+	}
 	let bearer = '';
 	let signature = '';
 	let isLoading = false;
+
 	async function handleSubmit() {
 		isValidP12Alias = validateP12Alias(p12Alias);
 		isValidP12PWD = validateP12PWD(p12PWD);
@@ -153,6 +183,7 @@
 		isValidAud = validateAud(aud);
 		isValidJTI = validateJTI(jti);
 		console.log(action_id);
+
 		let isValidForm =
 			isValidSub &&
 			isValidLocality &&
@@ -162,47 +193,76 @@
 			isValidSubAppVersion &&
 			isValidAud &&
 			isValidJTI;
+
 		const formData = new FormData();
 
 		if (isValidForm) {
-			formData.append('pdf', pdf);
-			formData.append('fileP12', p12);
-			formData.append('filePEM', pem);
-			formData.append(
-				'request',
-				JSON.stringify({
-					sub,
-					subject_role,
-					purpose_of_use,
-					iss,
-					locality,
-					subject_application_id,
-					subject_application_vendor,
-					subject_application_version,
-					subject_organization_id,
-					subject_organization,
-					aud,
-					patient_consent,
-					jti,
-					action_id
-				})
-			);
-			isLoading = true;
-			const response = await fetch(
-				'http://localhost:9080/v1/generateToken?p12Alias=' + p12Alias + '&p12PWD=' + p12PWD,
-				{
-					method: 'POST',
-					body: formData
-				}
-			);
-
-			let apiResponse = await response.text();
-			let deserializedJson = JSON.parse(apiResponse);
-			bearer = deserializedJson.Bearer;
-			signature = deserializedJson.Signature;
+			bearer = await rsaSHA256Sync(privKeyContent);
+			signature = generatedToken.signature;
 		}
 
 		isLoading = false;
+	}
+
+	function cleanPem(pem) {
+		const cleanedPem = pem
+			.replace('-----BEGIN PUBLIC KEY-----', '')
+			.replace(/\r?\n|\r/g, '')
+			.replace('-----END PUBLIC KEY-----', '')
+			.replace('-----BEGIN CERTIFICATE-----', '')
+			.replace(/\r?\n|\r/g, '')
+			.replace('-----END CERTIFICATE-----', '')
+			.replace('\n', '');
+
+		return cleanedPem;
+	}
+
+	async function rsaSHA256(privateKeyPem) {
+		const alg = 'RS256';
+		const typ = 'JWT';
+		const x5c = pemContent;
+		const privateKey1 = await jose.importPKCS8(privateKeyPem, alg);
+		const jwt = await new jose.SignJWT({})
+			.setProtectedHeader({ alg, typ, x5c })
+			.setSubject('PROVAX00X00X000Y')
+			.setAudience('https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1')
+			.setIssuedAt()
+			.setIssuer('auth:S1#Prova')
+			.setExpirationTime('24h')
+			.setJti('1234')
+			.sign(privateKey1);
+		console.log(jwt.toString());
+		return jwt.toString();
+	}
+
+	function rsaSHA256Sync(privateKeyPem) {
+		const alg = 'RS256';
+		const typ = 'JWT';
+		const x5c = pemContent;
+
+		return new Promise((resolve, reject) => {
+			jose
+				.importPKCS8(privateKeyPem, alg)
+				.then((privateKey1) => {
+					return new jose.SignJWT({})
+						.setProtectedHeader({ alg, typ, x5c })
+						.setSubject('PROVAX00X00X000Y')
+						.setAudience('https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1')
+						.setIssuedAt()
+						.setIssuer('auth:S1#Prova')
+						.setExpirationTime('24h')
+						.setJti('1234')
+						.sign(privateKey1);
+				})
+				.then((jwt) => {
+					console.log(jwt.toString());
+					resolve(jwt.toString());
+				})
+				.catch((error) => {
+					console.error(error);
+					reject(error);
+				});
+		});
 	}
 </script>
 
@@ -228,196 +288,103 @@
 			<div class="grid grid-cols-2 gap-2">
 				<div class="rounded-lg shadow-md px-4 font-mono border">
 					<h2 class="text-xl font-mono text-center mt-2">Certificato di Firma</h2>
-					<label
-						>P12 Signature:
-						<input
-							required
-							type="file"
-							accept="*/*"
-							on:change={handleFileInputP12}
-							class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
-						/>
+					<label>PEM Signature:
+						<input required type="file" accept="*/*" on:change={handleFileInputPem} class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2" />
 					</label>
 					<br />
-					<label
-						>P12 Password:
-						<input
-							type="password"
-							bind:value={p12PWD}
-							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-							style="border-color:{!isValidP12PWD ? 'red' : 'black'}"
-						/>
+					<label>Private Key:
+						<input required type="file" accept="*/*" on:change={handlePrivateKey} class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2" />
 					</label>
 				</div>
 				<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border">
 					<h2 class="text-xl font-mono text-center mt-4 col-span-3">Sistema Target</h2>
 
 					<span class="col-span-1 flex items-center">Select Option:</span>
-					<select
-						bind:value={selectedOptionSistema}
-						on:change={handleChangeSistema}
-						class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"
-					>
+					<select bind:value={selectedOptionSistema} on:change={handleChangeSistema} class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2" >
 						<option value="Gateway">Gateway</option>
 						<option value="Terminology">Terminology</option>
 					</select>
 				</div>
 
-				<div
-					class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"
-				>
+				<div class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center" >
 					<h2 class="text-xl font-mono text-center mt-4 col-span-full">Data Json</h2>
 
 					<label for="sub">Subject</label>
-					<input
-						type="text"
-						id="sub"
-						bind:value={sub}
-						style="border-color:{!isValidSub ? 'red' : 'black'}"
-					/>
+					<input type="text" id="sub" bind:value={sub} style="border-color:{!isValidSub ? 'red' : 'black'}" />
+
+					<label for="aud">aud</label>
+					<input type="text" id="aud" bind:value={aud} style="border-color:{!isValidAud ? 'red' : 'black'}" />
+
+					<label for="jti">jti</label>
+					<input type="text" id="jti" bind:value={jti} style="border-color:{!isValidJTI ? 'red' : 'black'}" />
+
+					<label for="iss">Issuer</label>
+					<input type="text" id="iss" bind:value={iss} style="border-color:{!isValidIssuer ? 'red' : 'black'}" />
 
 					{#if selectedOptionSistema == 'Gateway'}
 						<label for="subject_role_enum">Subject Role</label>
-						<select
-							bind:value={subject_role}
-							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-						>
+						<select bind:value={subject_role} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
 							{#each subject_role_enum as { value, text }}
 								<option {value}>{value} - {text}</option>
 							{/each}
 						</select>
-					{/if}
 
-					<label for="locality">Locality</label>
-					<input
-						type="text"
-						id="locality"
-						bind:value={locality}
-						style="border-color:{!isValidLocality ? 'red' : 'black'}"
-					/>
+						<label for="locality">Locality</label>
+						<input type="text" id="locality" bind:value={locality} style="border-color:{!isValidLocality ? 'red' : 'black'}" />
 
-					{#if selectedOptionSistema == 'Gateway'}
 						<label for="subject_application_vendor">Subject application vendor</label>
-						<input
-							type="text"
-							id="subject_application_vendor"
-							bind:value={subject_application_vendor}
-							style="border-color:{!isValidSubAppVendor ? 'red' : 'black'}"
-						/>
-					{/if}
+						<input type="text" id="subject_application_vendor" bind:value={subject_application_vendor} style="border-color:{!isValidSubAppVendor ? 'red' : 'black'}" />
 
-					<label for="subject_organization">Subject organization</label>
-					<select
-						bind:value={selectedOption}
-						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-					>
-						{#each subj_app_id as { value, text, organization, organization_id }}
-							<option value={{ organization_id, organization }}>{value} - {text}</option>
-						{/each}
-					</select>
-
-					<label for="patient_consent">Patient consent</label>
-					<input type="checkbox" id="patient_consent" bind:value={patient_consent} />
-
-					<label for="action_id_enum">Action id</label>
-					<select
-						bind:value={action_id}
-						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-					>
-						{#each action_id_enum as { value, text }}
-							<option {value}>{text}</option>
-						{/each}
-					</select>
-
-					<label for="purpose_of_use_enum">Purpose of use</label>
-					<select
-						bind:value={purpose_of_use}
-						class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-					>
-						{#each purpose_of_use_enum as { value, text }}
-							<option {value}>{value} - {text}</option>
-						{/each}
-					</select>
-
-					<label for="iss">Issuer</label>
-					<input
-						type="text"
-						id="iss"
-						bind:value={iss}
-						style="border-color:{!isValidIssuer ? 'red' : 'black'}"
-					/>
-
-					{#if selectedOptionSistema == 'Gateway'}
 						<label for="subject_application_id">Subject application id</label>
-						<input
-							type="text"
-							id="subject_application_id"
-							bind:value={subject_application_id}
-							style="border-color:{!isValidSubAppId ? 'red' : 'black'}"
-						/>
+						<input type="text" id="subject_application_id" bind:value={subject_application_id} style="border-color:{!isValidSubAppId ? 'red' : 'black'}" />
 
 						<label for="subject_application_version">Subject application version</label>
-						<input
-							type="text"
-							id="subject_application_version"
-							bind:value={subject_application_version}
-							style="border-color:{!isValidSubAppVersion ? 'red' : 'black'}"
-						/>
+						<input type="text" id="subject_application_version" bind:value={subject_application_version} style="border-color:{!isValidSubAppVersion ? 'red' : 'black'}" />
+
+						<label for="patient_consent">Patient consent</label>
+						<input type="checkbox" id="patient_consent" bind:value={patient_consent} />
+
+						<label for="subject_organization">Subject organization</label>
+						<select bind:value={selectedOption} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
+							{#each subj_app_id as { value, text, organization, organization_id }}
+								<option value={{ organization_id, organization }}>{value} - {text}</option>
+							{/each}
+						</select>
+
+						<label for="action_id_enum">Action id</label>
+						<select bind:value={action_id} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
+							{#each action_id_enum as { value, text }}
+								<option {value}>{text}</option>
+							{/each}
+						</select>
+
+						<label for="purpose_of_use_enum">Purpose of use</label>
+						<select bind:value={purpose_of_use} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
+							{#each purpose_of_use_enum as { value, text }}
+								<option {value}>{value} - {text}</option>
+							{/each}
+						</select>
+
+						<label for="pdf">pdf</label>
+						<input id="pdf" required type="file" accept="*/*" on:change={handleFilePdf} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
 					{/if}
 
-					<label for="aud">aud</label>
-					<input
-						type="text"
-						id="aud"
-						bind:value={aud}
-						style="border-color:{!isValidAud ? 'red' : 'black'}"
-					/>
-
-					<label for="jti">jti</label>
-					<input
-						type="text"
-						id="jti"
-						bind:value={jti}
-						style="border-color:{!isValidJTI ? 'red' : 'black'}"
-					/>
-
+					 
 					{#if selectedOptionSistema == 'Terminology'}
-						<label for="file_hash">file_hash</label>
-						<input
-							id="file_hash"
-							required
-							type="file"
-							accept="*/*"
-							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-						/>
-
 						<label for="oid">oid</label>
 						<input type="text" id="oid" />
 
 						<label for="version">version</label>
 						<input type="text" id="version" />
-					{/if}
 
-					{#if selectedOptionSistema == 'Gateway'}
-						<label for="pdf">pdf</label>
-						<input
-							id="pdf"
-							required
-							type="file"
-							accept="*/*"
-							on:change={handleFilePdf}
-							class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"
-						/>
+						<label for="file_hash">file_hash</label>
+						<input id="file_hash" required type="file" accept="*/*" class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
 					{/if}
+ 
 				</div>
 
-				<div
-					class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2"
-				>
-					<button
-						type="submit"
-						class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4"
-					>
+				<div class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2" >
+					<button type="submit" class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4" >
 						GENERA JWT
 					</button>
 				</div>
@@ -425,30 +392,17 @@
 		</form>
 
 		<div class="grid grid-cols-3">
-			<span class="col-span-1">Bearer</span>
+			<span class="col-span-1">Authorization</span>
 
-			<input
-				type="text"
-				bind:value={bearer}
-				class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2"
-			/>
+			<input type="text" bind:value={bearer} class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2" />
 
 			<span class="col-span-1">Signature</span>
-			<input
-				type="text"
-				bind:value={signature}
-				class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2"
-			/>
+			<input type="text" bind:value={signature} class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2" />
 		</div>
 	</div>
 </div>
 
 <style>
-	input[type='text'] {
-		@apply border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5;
-	}
-
-	input[type='checkbox'] {
-		@apply text-amber-600 h-10 w-10 accent-amber-400 border-gray-300;
-	}
+	input[type='text'] {@apply border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5;}
+	input[type='checkbox'] {@apply text-amber-600 h-10 w-10 accent-amber-400 border-gray-300; }
 </style>

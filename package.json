@@ -28,6 +28,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"pdf-lib": "^1.17.1"
+		"jose": "^4.14.4",
+		"jsonwebtoken": "^9.0.1",
+		"node-forge": "^1.3.1",
+		"pdf-lib": "^1.17.1",
+		"pem-jwk": "^2.0.0",
+		"pkijs": "^3.0.15"
 	}
 }
