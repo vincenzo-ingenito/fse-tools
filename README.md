@@ -1,38 +1,33 @@
-# create-svelte
+# Gatway Tools
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Gatway Tools è un progetto nato per soddisfare l'esigenza di avere una suite di strumenti utili per semplificare e ottimizzare le operazioni preliminari necessarie per l'invocazione del Gateway del Fascicolo Sanitario. L'obiettivo principale di questa suite è offrire un'esperienza intuitiva ed efficiente agli utenti.
 
-## Creating a project
+È importante sottolineare che Gatway Tools non è stato creato con l'intento di ottenere profitto o guadagnare, ma è un'iniziativa rivolta alla comunità. Il progetto è alimentato dalla passione per migliorare l'accessibilità e l'usabilità del Gateway del Fascicolo Sanitario, mettendo a disposizione degli strumenti gratuiti per agevolare l'interazione con questa risorsa fondamentale.
 
-If you're seeing this, you've probably already done this step. Congrats!
+Siamo aperti a contributi, suggerimenti e feedback dalla comunità per continuare a migliorare e espandere la suite di strumenti Gatway.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Contribuisci
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Siamo felici che tu voglia contribuire a questo progetto! Se desideri segnalare bug, proporre nuove funzionalità o miglioramenti, o semplicemente fare domande, apri un'issue nel repository. Siamo aperti a qualsiasi tipo di contributo, quindi non esitare a partecipare!
 
-## Developing
+## Guida alle issue
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Per aprire una nuova issue, segui questi passaggi:
 
-```bash
-npm run dev
+1. Assicurati di aver effettuato una ricerca nel repository per verificare se l'argomento è già stato discusso.
+2. Fai clic sul pulsante "New Issue" nella pagina delle issue del repository.
+3. Fornisci un titolo chiaro e descrittivo per la tua issue.
+4. Descrivi dettagliatamente il problema, la proposta o la domanda che desideri sollevare.
+5. Aggiungi eventuali etichette pertinenti per aiutare a categorizzare la tua issue.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+Una volta aperta un'issue, faremo del nostro meglio per rispondere e collaborare con te.
 
-## Building
+## Donazioni
 
-To create a production version of your app:
+Se desideri sostenere finanziariamente questo progetto, accettiamo donazioni tramite i seguenti metodi:
+ 
 
-```bash
-npm run build
-```
+Le donazioni ci aiutano a mantenere il progetto attivo, a coprire i costi di hosting e a migliorare le funzionalità offerte. Siamo grati per qualsiasi supporto che puoi offrire!
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Licenza
+  
