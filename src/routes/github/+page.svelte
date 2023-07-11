@@ -138,10 +138,10 @@
 		</div>
 
 		{#if selectedFile}
-			<div class="prose">
-				<h2>{selectedFile}</h2>
+			<div class="p-4 font-mono font-bold">
+				<h2>{selectedFile.split('/')[1]}</h2>
 				<pre
-					class="border-2 shadow-sm scroll-auto overflow-auto p-4 max-h-28 md:max-h-96 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">{fileContent}</pre>
+					class="bg-gray-700 w-full md:w-2/3 text-white font-mono border-2 shadow-sm scroll-auto overflow-auto p-4 max-h-[32rem] md:max-h-96 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">{fileContent}</pre>
 			</div>
 		{/if}
 	</div>
