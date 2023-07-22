@@ -81,7 +81,7 @@
 </script>
 
 <main class="p-4">
-	<div class="p-3 flex flex-col md:flex-row gap-4 mt-16 overflow-hidden justify-between">
+	<div class="p-3 md:p-12 flex flex-col md:flex-row gap-4 lg:gap-12 mt-16 overflow-hidden">
 		<div class="prose font-mono">
 			<table>
 				<thead>
@@ -141,7 +141,7 @@
 			<div class="p-4 font-mono font-bold">
 				<h2>{selectedFile.split('/')[1]}</h2>
 				<pre
-					class="bg-gray-700 w-full md:w-2/3 text-white font-mono border-2 shadow-sm scroll-auto overflow-auto p-4 max-h-[32rem] md:max-h-96 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">{fileContent}</pre>
+					class="bg-gray-700 text-white font-mono border-2 shadow-sm scroll-auto overflow-auto p-4 h-[50vh] w-full md:w-[100vh] scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">{fileContent}</pre>
 			</div>
 		{/if}
 	</div>
