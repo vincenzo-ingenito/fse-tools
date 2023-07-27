@@ -119,7 +119,13 @@
 	 */
 	function handleChangeSistema(event) {
 		selectedOptionSistema = event.target.value;
+
+		if(selectedOptionSistema === "Terminology"){
+			sub = "PROVAX00X00X000Y";
+			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1"
+		}
 	}
+
 
 	//DATA JSON END
 
@@ -127,6 +133,26 @@
 		pdf = event.target.files[0];
 		fileNamePdf = pdf.name;
 	};
+
+	let fileTerminology;
+  let fileNameTerminology = '';
+  let file_hash_terminology = '';
+
+  const handleFileTerminology = async (event) => {
+    fileTerminology = event.target.files[0];
+    fileNameTerminology = fileTerminology.name;
+    file_hash_terminology = await calculateSHA256(fileTerminology);
+	console.log(file_hash_terminology)
+  };
+
+  const calculateSHA256 = async (file) => {
+    const buffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  };
+	
 
 	/**
 	 * @param {{ target: { files: any[]; }; }} event
@@ -253,7 +279,7 @@
 						.setSubject(sub)
 						.setAudience(aud)
 						.setIssuedAt()
-						.setIssuer(iss)
+						.setIssuer("auth:"+iss)
 						.setExpirationTime('24h')
 						.setJti(jti)
 						.sign(privateKey1);
@@ -275,7 +301,7 @@
 				subject_application_vendor, subject_application_version, aud, patient_consent, jti, action_id
 			};
 		} else if (selectedOptionSistema == 'Terminology') {
-			dataJson = { oid,version };
+			dataJson = { oid,version, file_hash_terminology };
 		}
 
 		return new Promise((resolve, reject) => {
@@ -287,7 +313,7 @@
 						.setSubject(sub)
 						.setAudience(aud)
 						.setIssuedAt()
-						.setIssuer(iss)
+						.setIssuer("integrity:"+iss)
 						.setExpirationTime('24h')
 						.setJti(jti)
 						.sign(privateKey1);
@@ -471,9 +497,9 @@
 
 						<label for="version">version</label>
 						<input type="text" bind:value={version} style="border-color:{!isValidVersion ? 'red' : 'black'}" id="version" />
-
-						<label for="file_hash">file_hash</label>
-						<input id="file_hash" type="file" accept="*/*" class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
+ 
+						<label for="file_terminology">File</label>
+						<input id="file_terminology" type="file" accept="*/*" on:change={handleFileTerminology} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
 					{/if}
 				</div>
 
