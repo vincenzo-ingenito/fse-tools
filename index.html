@@ -47,8 +47,9 @@
 			<script>
 				{
 					__sveltekit_ji4ayc = {
-						base: new URL(".", location).pathname.slice(0, -1),
-						env: {}
+						env: {},
+						assets: new URL(".", location.href).pathname.replace(/^\/$/, ''),
+						element: document.currentScript.parentElement
 					};
 
 					const element = document.currentScript.parentElement;
