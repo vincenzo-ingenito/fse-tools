@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		
+		<link href="./_app/immutable/assets/0.715fb977.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/4.f9baa4a4.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.df3d6b16.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.f3787bc2.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.93c96a63.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.7a7c2e03.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.d3187161.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/4.64d0d859.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">
+
+
+<header class="bg-gray-900 md:fixed z-50 w-full top-0 svelte-9figq1"><div class="w-full h-20"><nav><div class="hidden md:grid grid-cols-6 items-center h-20"><div class="flex justify-start col-span-1"><ul class="hidden md:flex ml-5"><li><div class="item svelte-9figq1"><a href="/" class="text-white hover:text-amber-300 font-extrabold">Home</a></div></li></ul></div>
+				<div class="col-span-5 flex justify-end"><ul class="gap-2 md:flex mr-10" aria-label="Navigation"><li><div class="item svelte-9figq1"><p class="text-amber-300">00.</p>
+								<a href="/github" class="text-white hover:text-amber-300">Git</a></div></li>
+						<li><div class="item svelte-9figq1"><p class="text-amber-300">01.</p>
+								<a href="/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a></div></li>
+						<li><div class="item svelte-9figq1"><p class="text-amber-300">02.</p>
+								<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a></div></li></ul></div></div></nav>
+		<div class="md:hidden absolute w-full flex flex-row-reverse right-5 top-3"><button class="flex items-center rounded top-0 right-0 text-amber-300"><svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div>
+	
+</header>
+
+<body><div>
+
+	<div class="p-4 pt-20 md:w-3/4 mx-auto"><h1 class="pt-4 text-gray-700 text-2xl font-mono font-extrabold text-center mb-5">JWT Generation
+		</h1>
+		<form><div class="grid grid-cols-2 gap-2"><div class="rounded-lg shadow-md px-4 font-mono border"><h2 class="text-xl font-mono text-center mt-2">Certificato di Firma</h2>
+					<label>PEM Signature:
+						<input required type="file" accept="*/*" class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"></label>
+					<br>
+					<label>Private Key:
+						<input required type="file" accept="*/*" class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"></label></div>
+				<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border"><h2 class="text-xl font-mono text-center mt-4 col-span-3">Sistema Target</h2>
+
+					<span class="col-span-1 flex items-center">Select Option:</span>
+					<select class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"><option value="Gateway">Gateway</option><option value="Terminology">Terminology</option></select></div>
+
+				<div class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"><h2 class="text-xl font-mono text-center mt-4 col-span-full">Data Json</h2>
+
+					<label for="sub">Subject</label>
+					<input type="text" id="sub" style="border-color:black" class="svelte-1jnzdco" value="SSSMNN75B01F257L^^^&amp;amp;2.16.840.1.113883.2.9.4.3.2&amp;amp;ISO">
+
+					<label for="aud">aud</label>
+					<input type="text" id="aud" style="border-color:black" class="svelte-1jnzdco" value="https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1">
+
+					<label for="jti">jti</label>
+					<input type="text" id="jti" style="border-color:black" class="svelte-1jnzdco" value="">
+
+					<label for="iss">Issuer</label>
+					<input type="text" id="iss" style="border-color:black" class="svelte-1jnzdco" value="S1#190201234567XX">
+
+					<label for="subject_role_enum">Subject Role</label>
+						<select class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"><option value="AAS">AAS - Personale di assistenza ad alta specializzazione</option><option value="APR">APR - Medico Medicina Generale Pediatra di Libera Scelta</option><option value="PSS">PSS - Professionista del sociale</option><option value="INF">INF - Personale infermieristico</option><option value="FAR">FAR - Farmacista</option><option value="DSA">DSA - Direttore sanitario</option><option value="DAM">DAM - Direttore amministrativo</option><option value="OAM">OAM - Operatore amministrativo</option><option value="ASS">ASS - Assistito</option><option value="TUT">TUT - Tutore</option><option value="ING">ING - Informal giver (Assistito)</option><option value="GEN">GEN - Genitore Assistito</option><option value="NOR">NOR - Nodo regionale</option><option value="DRS">DRS - Dirigente sanitario</option><option value="RSA">RSA - Medico RSA</option><option value="MRP">MRP - Medico Rete di Patologia</option><option value="INI">INI - Infrastruttura Nazionale per l’Interoperabilità</option><option value="OGC">OGC - Operatore per la gestione dei consensi</option><option value="OPI">OPI - Operatore di informativa</option><option value="MDS">MDS - Ruolo del Ministero della Salute per la gestione del DGC</option></select>
+
+						<label for="locality">Locality</label>
+						<input type="text" id="locality" style="border-color:black" class="svelte-1jnzdco" value="201123456">
+
+						<label for="subject_application_vendor">Subject application vendor</label>
+						<input type="text" id="subject_application_vendor" style="border-color:black" class="svelte-1jnzdco" value="GATEWAY">
+
+						<label for="subject_application_id">Subject application id</label>
+						<input type="text" id="subject_application_id" style="border-color:black" class="svelte-1jnzdco" value="GTW">
+
+						<label for="subject_application_version">Subject application version</label>
+						<input type="text" id="subject_application_version" style="border-color:black" class="svelte-1jnzdco" value="R2">
+
+						<label for="patient_consent">Patient consent</label>
+						<input type="checkbox" id="patient_consent" class="svelte-1jnzdco" value="true">
+
+						<label for="subject_organization">Subject organization</label>
+						<select class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"><option value="[object Object]">010 - Regione Piemonte</option><option value="[object Object]">020 - Regione Valle dAosta</option><option value="[object Object]">030 - Regione Lombardia</option><option value="[object Object]">041 - P.A. Bolzano</option><option value="[object Object]">042 - P.A. Trento</option><option value="[object Object]">050 - Regione Veneto</option><option value="[object Object]">060 - Regione Friuli Venezia Giulia</option><option value="[object Object]">070 - Regione Liguria</option><option value="[object Object]">080 - Regione Emilia-Romagna</option><option value="[object Object]">090 - Regione Toscana</option><option value="[object Object]">100 - Regione Umbria</option><option value="[object Object]">110 - Regione Marche</option><option value="[object Object]">120 - Regione Lazio</option><option value="[object Object]">130 - Regione Abruzzo</option><option value="[object Object]">140 - Regione Molise</option><option value="[object Object]">150 - Regione Campania</option><option value="[object Object]">160 - Regione Puglia</option><option value="[object Object]">170 - Regione Basilicata</option><option value="[object Object]">180 - Regione Calabria</option><option value="[object Object]">190 - Regione Sicilia</option><option value="[object Object]">200 - Regione Sardegna</option><option value="[object Object]">000 - INI</option><option value="[object Object]">001 - SASN</option><option value="[object Object]">999 - MDS</option></select>
+
+						<label for="action_id_enum">Action id</label>
+						<select class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"><option value="CREATE">CREATE</option><option value="UPDATE">UPDATE</option><option value="DELETE">DELETE</option><option value="REPLACE">REPLACE</option></select>
+
+						<label for="purpose_of_use_enum">Purpose of use</label>
+						<select class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300"><option value="TREATMENT">TREATMENT - Trattamento di cura ordinario</option><option value="EMERGENCY">EMERGENCY - Trattamento in emergenza</option><option value="PUBEMERGENCY">PUBEMERGENCY - Trattamento per la salvaguardia di un terzo o della collettività</option><option value="SYSADMIN">SYSADMIN - Trasferimento del FSE</option><option value="PERSONAL">PERSONAL - Consultazione del FSE</option><option value="UPDATE">UPDATE - Invalidamento e aggiornamento di un documento</option><option value="CONSENT">CONSENT - Comunicazione valori consensi</option><option value="ADMINISTRATIVE">ADMINISTRATIVE - Operazioni amministrative</option></select>
+
+						<label for="pdf">pdf</label>
+						<input id="pdf" type="file" accept="application/pdf" class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
+
+					</div>
+
+				<div class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2"><button type="submit" class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4">GENERA JWT
+					</button></div></div></form>
+
+		<div class="grid grid-cols-3"><span class="col-span-1">Authorization</span>
+
+			<input type="text" class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2 svelte-1jnzdco" value="">
+
+			<span class="col-span-1">Signature</span>
+			<input type="text" class="h-10 border-2 border-gray-300 rounded-md py-2 px-4 block w-full leading-5 col-span-2 svelte-1jnzdco" value=""></div></div>
+</div></body>
+
+
+			
+			<script>
+				{
+					__sveltekit_2p3f98 = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.df3d6b16.js"),
+						import("./_app/immutable/entry/app.7a7c2e03.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 4],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
