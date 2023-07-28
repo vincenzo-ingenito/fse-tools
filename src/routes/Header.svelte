@@ -13,7 +13,7 @@
 			headerClasses =
 				'bg-gray-900 md:fixed z-50 w-full top-0 shadow-2xl transition duration-500 ease-in-out transform md:-translate-y-full';
 		}
-		// If is at top, remove shado
+		// If is at top, remove shadow
 		if (currentScrollPos === 0) {
 			headerClasses = 'bg-gray-900 md:fixed z-50 w-full top-0';
 		}
