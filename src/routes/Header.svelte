@@ -1,8 +1,10 @@
 <script>
+	import { base } from '$app/paths';
+ 
 	import { createEventDispatcher, onMount } from 'svelte';
 	let mobileMenuOpen = false;
 	let headerClasses = 'bg-gray-900 md:fixed z-50 w-full top-0';
-	// Hide header on scroll dow
+	// Hide header on scroll down
 	let prevScrollpos = 0;
 	const handleScroll = () => {
 		let currentScrollPos = window.pageYOffset;
@@ -41,7 +43,7 @@
 					<ul class="hidden md:flex ml-5">
 						<li>
 							<div class="item">
-								<a href="/" class="text-white hover:text-amber-300 font-extrabold">Home</a>
+								<a href="{base}/" class="text-white hover:text-amber-300 font-extrabold">Home</a>
 							</div>
 						</li>
 					</ul>
@@ -51,19 +53,19 @@
 						<li>
 							<div class="item">
 								<p class="text-amber-300">00.</p>
-								<a href="/github" class="text-white hover:text-amber-300">Git</a>
+								<a href="{base}/github" class="text-white hover:text-amber-300">Git</a>
 							</div>
 						</li>
 						<li>
 							<div class="item">
 								<p class="text-amber-300">01.</p>
-								<a href="/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a>
+								<a href="{base}/pdfInject" class="text-white hover:text-amber-300">Pdf Inject</a>
 							</div>
 						</li>
 						<li>
 							<div class="item">
 								<p class="text-amber-300">02.</p>
-								<a href="/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
+								<a href="{base}/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
 							</div>
 						</li>
 					</ul>
