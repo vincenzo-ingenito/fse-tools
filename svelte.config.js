@@ -5,6 +5,9 @@ import sveltePreprocess from "svelte-preprocess";
 const config = {
   kit: {
     adapter: adapter(),
+    paths: {
+      base: '',
+    }
   },
   preprocess: sveltePreprocess({
     postcss: true,
