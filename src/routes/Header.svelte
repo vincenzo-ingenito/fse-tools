@@ -2,7 +2,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	let mobileMenuOpen = false;
 	let headerClasses = 'bg-gray-900 md:fixed z-50 w-full top-0';
-	// Hide header on scroll down
+	// Hide header on scroll dow
 	let prevScrollpos = 0;
 	const handleScroll = () => {
 		let currentScrollPos = window.pageYOffset;
