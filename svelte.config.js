@@ -6,8 +6,8 @@ const config = {
   kit: {
     adapter: adapter(),
     paths: {
-      base: '',
-    }
+      base: process.env.NODE_ENV === 'production' ? '/gtw-tools' : '',
+  }
   },
   preprocess: sveltePreprocess({
     postcss: true,
