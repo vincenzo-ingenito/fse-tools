@@ -7,7 +7,7 @@
 			permetterà di gestire in modo più intuitivo alcune operazioni di interfacciamento con il mondo Fascicolo
 			Sanitario 2.0. Tale progetto non è stato commissionato in alcun modo dagli enti ufficiali ma nasce un pò per divertimento
 			e per sperimentare nuove tecnologie.
-			Siamo comunque liete di accogliere suggerimenti e migliorie eventuali.
+			Siamo comunque lieti di accogliere suggerimenti e migliorie eventuali.
 		</p>
 	</main>
 </div>

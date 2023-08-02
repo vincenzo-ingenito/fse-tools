@@ -34,7 +34,7 @@
 		return sub.length > 0;
 	}
 
-	let iss = 'S1#190201234567XX';
+	let iss = 'S1#190201123456XX';
 	$: isValidIssuer = true;
 	/**
 	 * @param {string | any[]} iss
@@ -134,7 +134,7 @@
 		if(selectedOptionSistema === "Terminology"){
 			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1";
 		} else if(selectedOptionSistema === "Provisioning"){
-			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1";
+			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/provisioning/v1";
 		} else if(selectedOptionSistema === "Gateway"){
 			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1";
 			sub += "^^^&amp;2.16.840.1.113883.2.9.4.3.2&amp;ISO";
