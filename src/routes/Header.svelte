@@ -123,9 +123,9 @@
 						<div class="item">
 							<p class="text-amber-300">01.</p>
 							<a
-								href="/github"
+								href="{base}/github"
 								class="text-white hover:text-amber-300"
-								on:click={handleMobileMenuClose}>github</a
+								on:click={handleMobileMenuClose}>Git</a
 							>
 						</div>
 					</li> 
@@ -133,9 +133,9 @@
 						<div class="item">
 							<p class="text-amber-300">02.</p>
 							<a
-								href="/jwtGenerator"
+								href="{base}/pdfInject"
 								class="text-white hover:text-amber-300"
-								on:click={handleMobileMenuClose}>jwtGenerator</a
+								on:click={handleMobileMenuClose}>Pdf Inject</a
 							>
 						</div>
 					</li>
@@ -143,9 +143,9 @@
 						<div class="item">
 							<p class="text-amber-300">03.</p>
 							<a
-								href="/pdfInject"
+								href="{base}/jwtGenerator"
 								class="text-white hover:text-amber-300"
-								on:click={handleMobileMenuClose}>pdfInject</a
+								on:click={handleMobileMenuClose}>Jwt Generation</a
 							>
 						</div>
 					</li> 
