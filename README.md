@@ -13,6 +13,6 @@ Se pensi ci siano margini di migliramento sia per gli strumenti già presenti si
 
 ## Contributors
 
-- Vincenzo Ingenito (@vincenzo-ingenito)
-- Simone Lungarella (@simone-lungarella)
+- [Vincenzo Ingenito](https://github.com/vincenzo-ingenito) ![Vincenzo Ingenito](contributors/vincenzo-ingenito.jpg)
+- [Simone Lungarella](https://github.com/simone-lungarella) ![Simone Lungarella](contributors/simone-lungarella.jpg)
   
