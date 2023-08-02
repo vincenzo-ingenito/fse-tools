@@ -7,13 +7,13 @@
 		
 		<link href="./_app/immutable/assets/0.715fb977.css" rel="stylesheet">
 		<link href="./_app/immutable/assets/4.f9baa4a4.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.74caf68a.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.8dceea2a.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/index.f3787bc2.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.f71cef1f.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/paths.87053a37.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.8584f85e.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.b94fb4d0.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/4.f462f047.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.62e588b7.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/paths.000fcab7.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.cc4ea9a9.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.f7b72a6f.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/4.149ab4f4.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
@@ -43,12 +43,12 @@
 				<div class="grid grid-rows-3 grid-cols-3 rounded-lg shadow-md px-4 pb-4 font-mono border"><h2 class="text-xl font-mono text-center mt-4 col-span-3">Sistema Target</h2>
 
 					<span class="col-span-1 flex items-center">Select Option:</span>
-					<select class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"><option value="Gateway">Gateway</option><option value="Terminology">Terminology</option></select></div>
-
+					<select class="py-2 px-3 block w-full leading-5 rounded-md sm:text-sm sm:leading-5 col-span-2"><option value="Gateway">Gateway</option><option value="Terminology">Terminology</option><option value="Provisioning">Provisioning</option></select></div>
+				
 				<div class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"><h2 class="text-xl font-mono text-center mt-4 col-span-full">Data Json</h2>
 
 					<label for="sub">Subject</label>
-					<input type="text" id="sub" style="border-color:black" class="svelte-1jnzdco" value="SSSMNN75B01F257L^^^&amp;amp;2.16.840.1.113883.2.9.4.3.2&amp;amp;ISO">
+					<input type="text" id="sub" style="border-color:black" class="svelte-1jnzdco" value="PROVAX00X00X000Y^^^&amp;amp;2.16.840.1.113883.2.9.4.3.2&amp;amp;ISO">
 
 					<label for="aud">aud</label>
 					<input type="text" id="aud" style="border-color:black" class="svelte-1jnzdco" value="https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1">
@@ -89,6 +89,12 @@
 						<label for="pdf">pdf</label>
 						<input id="pdf" type="file" accept="application/pdf" class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300">
 
+					
+
+					
+
+					
+
 					</div>
 
 				<div class="col-span-full p-4 text-center grid place-content-center content-center grid-flow-col gap-2"><button type="submit" class="rounded-md bg-green-500 text-white font-extrabold font-mono hover:bg-green-600 h-10 w-40 m-4">GENERA JWT
@@ -106,7 +112,7 @@
 			
 			<script>
 				{
-					__sveltekit_pikuns = {
+					__sveltekit_13k67st = {
 						assets: "/gtw-tools",
 						base: new URL(".", location).pathname.slice(0, -1),
 						env: {}
@@ -117,8 +123,8 @@
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.74caf68a.js"),
-						import("./_app/immutable/entry/app.8584f85e.js")
+						import("./_app/immutable/entry/start.8dceea2a.js"),
+						import("./_app/immutable/entry/app.cc4ea9a9.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 4],
