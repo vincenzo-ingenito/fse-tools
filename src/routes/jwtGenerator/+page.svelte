@@ -16,6 +16,7 @@
 	let purpose_of_use = 'TREATMENT';
 	let subject_role = 'AAS';
 	let selectedOptionSistema = 'Gateway';
+	let selectedOptionOpProvisioning = 'Creazione';
 
 	/**
 	 * @type {string | Blob}
@@ -24,7 +25,7 @@
 	let fileNamePdf = '';
 
 	//DATA JSON START
-	let sub = 'SSSMNN75B01F257L^^^&amp;2.16.840.1.113883.2.9.4.3.2&amp;ISO';
+	let sub = 'PROVAX00X00X000Y^^^&amp;2.16.840.1.113883.2.9.4.3.2&amp;ISO';
 	$: isValidSub = true;
 	/**
 	 * @param {string | any[]} sub
@@ -114,16 +115,31 @@
 		return version.length > 0;
 	}
 
+	let uuidToRevoke = '';
+	$: isValidUuidToRevoke = true;
+	/**
+	 * @param {string | any[]} uuidToRevoke
+	 */
+	function validateUuidToRevoke(uuidToRevoke) {
+		return uuidToRevoke.length > 0;
+	}
+
 	/**
 	 * @param {{ target: { value: string; }; }} event
 	 */
 	function handleChangeSistema(event) {
 		selectedOptionSistema = event.target.value;
 
+		sub = "PROVAX00X00X000Y";
 		if(selectedOptionSistema === "Terminology"){
-			sub = "PROVAX00X00X000Y";
-			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1"
+			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1";
+		} else if(selectedOptionSistema === "Provisioning"){
+			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/terminology/v1";
+		} else if(selectedOptionSistema === "Gateway"){
+			aud = "https://modipa-val.fse.salute.gov.it/govway/rest/in/FSE/gateway/v1";
+			sub += "^^^&amp;2.16.840.1.113883.2.9.4.3.2&amp;ISO";
 		}
+
 	}
 
 
@@ -142,8 +158,21 @@
     fileTerminology = event.target.files[0];
     fileNameTerminology = fileTerminology.name;
     file_hash_terminology = await calculateSHA256(fileTerminology);
-	console.log(file_hash_terminology)
   };
+
+  const vector_hash_csr = [];
+
+  const handleFilesCSR = async (event) => {
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const fileCSR = files[i];
+        const fileHashCSR = await calculateSHA256(fileCSR);
+
+		vector_hash_csr.push(fileHashCSR);
+      
+    }
+};
 
   const calculateSHA256 = async (file) => {
     const buffer = await file.arrayBuffer();
@@ -302,6 +331,14 @@
 			};
 		} else if (selectedOptionSistema == 'Terminology') {
 			dataJson = { oid,version, file_hash_terminology };
+		} else if (selectedOptionSistema == 'Provisioning') {
+			if(selectedOptionOpProvisioning==="Revoca"){
+				const vector_id = uuidToRevoke === '' ? null : uuidToRevoke;
+				dataJson = { vector_id};	
+			} else if((selectedOptionOpProvisioning==="Creazione" || selectedOptionOpProvisioning==="Rinnovo")){
+				dataJson = { vector_hash_csr};
+			}
+			
 		}
 
 		return new Promise((resolve, reject) => {
@@ -384,9 +421,10 @@
 					>
 						<option value="Gateway">Gateway</option>
 						<option value="Terminology">Terminology</option>
+						<option value="Provisioning">Provisioning</option>
 					</select>
 				</div>
-
+				
 				<div
 					class="mt-10 col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 rounded-lg shadow-md px-4 pb-4 font-mono border items-center place-content-center"
 				>
@@ -501,6 +539,26 @@
 						<label for="file_terminology">File</label>
 						<input id="file_terminology" type="file" accept="*/*" on:change={handleFileTerminology} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
 					{/if}
+
+					{#if selectedOptionSistema==="Provisioning"}
+					<span class="col-span-1 flex items-center">Operazione</span>
+					<select bind:value={selectedOptionOpProvisioning} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
+						<option value="Creazione">Creazione</option>
+						<option value="Rinnovo">Rinnovo</option>
+						<option value="Revoca">Revoca</option>
+					</select>
+					{/if}
+
+					{#if selectedOptionSistema==="Provisioning" && (selectedOptionOpProvisioning==="Creazione" || selectedOptionOpProvisioning==="Rinnovo")}
+						<label for="file_csr">CSR</label>
+						<input id="file_csr" multiple type="file" accept="*/*" on:change={handleFilesCSR} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
+					{/if}
+
+					{#if selectedOptionSistema==="Provisioning" && selectedOptionOpProvisioning==="Revoca"}
+					<label for="uuid_to_revoke">uuid</label>
+					<input type="text" id="uuid_to_revoke" bind:value={uuidToRevoke} style="border-color:{!isValidUuidToRevoke ? 'red' : 'black'}" />
+					{/if}
+
 				</div>
 
 				<div
