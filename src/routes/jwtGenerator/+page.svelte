@@ -572,7 +572,7 @@
 					<select bind:value={selectedOptionOpProvisioning} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" >
 						<option value="Creazione">Creazione</option>
 						<option value="Rinnovo">Rinnovo</option>
-						<option value="Revoca">Revoca</option>
+						<option value="Revoca">Revoca </option>
 					</select>
 					{/if}
 
