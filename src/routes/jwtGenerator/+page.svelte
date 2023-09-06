@@ -27,13 +27,13 @@
 		return person_id.length > 0;
 	}
 
-	let resourceHl7Type = ''; 
-	$: isValidResourceHl7Type = true;
+	let resource_hl7_type = ''; 
+	$: isValidResource_hl7_type = true;
 	/**
-	 * @param {string | any[]} resourceHl7Type
+	 * @param {string | any[]} resource_hl7_type
 	 */
-	function validateResourceHl7Type(resourceHl7Type) {
-		return resourceHl7Type.length > 0;
+	function validateResourceHl7Type(resource_hl7_type) {
+		return resource_hl7_type.length > 0;
 	}
 
 	/**
@@ -269,9 +269,9 @@
 			isValidSubAppId = validateSubjAppId(subject_application_id);
 			isValidSubAppVendor = validateSubjAppVendor(subject_application_vendor);
 			isValidSubAppVersion = validateSubjAppVersion(subject_application_version);
-			isValidResourceHl7Type = validateResourceHl7Type(resourceHl7Type);
+			isValidResource_hl7_type = validateResourceHl7Type(resource_hl7_type);
 			isValidPersonId = validatePersonId(person_id);
-			output = isValidLocality && isValidSubAppId && isValidSubAppVendor && isValidSubAppVersion && isValidResourceHl7Type && isValidPersonId;
+			output = isValidLocality && isValidSubAppId && isValidSubAppVendor && isValidSubAppVersion && isValidResource_hl7_type && isValidPersonId;
 		}
 		return output;
 	}
@@ -347,7 +347,7 @@
 		let dataJson = [];
 		if (selectedOptionSistema == 'Gateway') {
 			dataJson = { sub, subject_role, purpose_of_use, iss, locality, subject_application_id,
-				subject_application_vendor, subject_application_version, aud, patient_consent, jti, action_id, resourceHl7Type,
+				subject_application_vendor, subject_application_version, aud, patient_consent, jti, action_id, resource_hl7_type,
 				person_id
 			};
 		} else if (selectedOptionSistema == 'Terminology') {
@@ -550,10 +550,10 @@
 						<input id="pdf" type="file" accept="application/pdf" on:change={handleFilePdf} class="w-full py-2 px-4 mb-4 rounded-md border border-gray-300" />
 
 						<label for="resource_hl7_type">Resource HL7 Type</label>
-						<input type="text" id="resource_hl7_type" bind:value={resourceHl7Type} style="border-color:{!isValidResourceHl7Type ? 'red' : 'black'}" />
+						<input type="text" id="resource_hl7_type" bind:value={resource_hl7_type} style="border-color:{!isValidResource_hl7_type ? 'red' : 'black'}" />
 
 						<label for="person_id">Person Id</label>
-						<input type="text" id="person_id" bind:value={person_id} style="border-color:{!isValidResourceHl7Type ? 'red' : 'black'}" />
+						<input type="text" id="person_id" bind:value={person_id} style="border-color:{!isValidPersonId ? 'red' : 'black'}" />
 					{/if}
 
 					{#if selectedOptionSistema == 'Terminology'}
