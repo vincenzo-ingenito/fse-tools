@@ -347,7 +347,7 @@
 		let dataJson = [];
 		if (selectedOptionSistema == 'Gateway') {
 			dataJson = { sub, subject_role, purpose_of_use, iss, locality, subject_application_id,
-				subject_application_vendor, subject_application_version, aud, patient_consent, jti, action_id, resource_hl7_type,
+				subject_application_vendor, subject_application_version, aud, patient_consent, jti, action_id, resourceHl7Type,
 				person_id
 			};
 		} else if (selectedOptionSistema == 'Terminology') {
