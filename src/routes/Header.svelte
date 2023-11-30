@@ -68,6 +68,12 @@
 								<a href="{base}/jwtGenerator" class="text-white hover:text-amber-300">Jwt Generation</a>
 							</div>
 						</li>
+						<li>
+							<div class="item">
+								<p class="text-amber-300">03.</p>
+								<a href="{base}/canva" class="text-white hover:text-amber-300">Canva</a>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -146,6 +152,16 @@
 								href="{base}/jwtGenerator"
 								class="text-white hover:text-amber-300"
 								on:click={handleMobileMenuClose}>Jwt Generation</a
+							>
+						</div>
+					</li> 
+					<li>
+						<div class="item">
+							<p class="text-amber-300">03.</p>
+							<a
+								href="{base}/canva"
+								class="text-white hover:text-amber-300"
+								on:click={handleMobileMenuClose}>Canva</a
 							>
 						</div>
 					</li> 
