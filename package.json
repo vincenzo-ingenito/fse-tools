@@ -20,6 +20,7 @@
 		"@sveltejs/kit": "^1.0.0",
 		"@tailwindcss/typography": "^0.5.8",
 		"autoprefixer": "^10.4.13",
+		"create-vite": "^5.0.0",
 		"gh-pages": "^4.0.0",
 		"postcss": "^8.4.21",
 		"prettier": "^2.8.0",
