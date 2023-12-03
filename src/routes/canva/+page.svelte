@@ -1,90 +1,21 @@
-<script>
+<script> 
+  import { onMount, onDestroy } from 'svelte';
+  import { writable } from 'svelte/store';
   import Konva from 'konva';
-  import { onMount } from 'svelte';
+
 
   let stage;
   let layer;
-  let groupLeftColumn;
-  let groupRightColumn;
-  let groupShape;
-  let blueShape;
-  let redShape;
-  let isDraggingToRight = false;
-  let isDraggingRed = false;
+  let hexagons = [];
+  let arrows = [];
+  let arrowObject = writable({});
 
-  let initialShapePosition = { x: 0, y: 0 };
-  let initialRedShapePosition = { x: 0, y: 0 };
+  // Abbonati agli aggiornamenti di arrowObject
+  let unsubscribe = arrowObject.subscribe(value => {
+    console.log('arrowObject:', value);
+  });
 
   onMount(() => {
-    const handleDragStart = (shape) => {
-      initialShapePosition = { x: shape.x(), y: shape.y() };
-      isDraggingToRight = false;
-    };
-
-    const handleDragEnd = (shape) => {
-      if (isDraggingToRight) {
-        const clonedShape = shape.clone({ draggable: true });
-        const deleteIcon = new Konva.Text({
-          x: 0,
-          y: -15,
-          text: 'X',
-          fontSize: 18,
-          fontFamily: 'Arial',
-          fill: 'red',
-          width: 20,
-          align: 'center',
-          draggable: false,
-          listening: true,
-        });
-        const group = new Konva.Group({
-          draggable: true,
-        });
-
-        group.add(clonedShape);
-        group.add(deleteIcon);
-
-        groupRightColumn.add(group);
-        layer.batchDraw();
-
-        shape.position(initialShapePosition);
-        layer.batchDraw();
-      } else {
-        shape.position(initialShapePosition);
-        layer.batchDraw();
-      }
-    };
-
-    const handleDragMove = (event, shape) => {
-      if (shape.x() > window.innerWidth * 0.3) {
-        isDraggingToRight = true;
-      } else {
-        isDraggingToRight = false;
-      }
-    };
-
-    const handleDeleteIconClick = (event) => {
-      const clickedShape = event.target.getParent();
-      clickedShape.destroy();
-      layer.batchDraw();
-    };
-
-    const setupShape = (shape, initialX, group) => {
-      shape.on('dragstart', () => handleDragStart(shape));
-      shape.on('dragend', () => handleDragEnd(shape));
-      shape.on('dragmove', (event) => handleDragMove(event, shape));
-
-      layer.on('click', (event) => {
-        const clickedShape = event.target;
-        if (clickedShape.getClassName() === 'Text' && clickedShape.text() === 'X') {
-          handleDeleteIconClick(event);
-        }
-      });
-
-      group.add(shape);
-
-      return shape;
-    };
-
     stage = new Konva.Stage({
       container: 'container',
       width: window.innerWidth,
@@ -93,88 +24,96 @@
 
     layer = new Konva.Layer();
     stage.add(layer);
+  });
 
-    groupLeftColumn = new Konva.Group();
-    layer.add(groupLeftColumn);
+  function createHexagon() {
+    const hexagonName = prompt('Inserisci il nome per l\'esagono:');
+    if (!hexagonName) {
+      alert('Il nome non può essere vuoto. Riprova.');
+      return;
+    }
 
-    const leftRect = new Konva.Rect({
-      x: 0,
-      y: 0,
-      fill: 'gray',
-      width: window.innerWidth * 0.3,
-      height: window.innerHeight,
+    const hexagon = new Konva.RegularPolygon({
+      x: Math.random() * stage.width(),
+      y: Math.random() * stage.height(),
+      sides: 6,
+      radius: 50,
+      fill: getRandomColor(),
+      draggable: true,
+      name: hexagonName,
     });
-    groupLeftColumn.add(leftRect);
 
-    groupRightColumn = new Konva.Group();
-    layer.add(groupRightColumn);
+    layer.add(hexagon);
+    hexagons = [...hexagons, hexagon];
 
-    const rightRect = new Konva.Rect({
-      x: window.innerWidth * 0.3,
-      y: 0,
-      fill: 'white',
-      width: window.innerWidth * 0.7,
-      height: window.innerHeight,
+    // Aggiorna l'oggetto arrowObject
+    arrowObject.update(obj => {
+      obj[hexagonName] = { id: hexagonName, link: [] };
+      return obj;
     });
-    groupRightColumn.add(rightRect);
 
-    const blueBorder = new Konva.Rect({
-      x: window.innerWidth * 0.3,
-      y: 0,
-      fill: 'blue',
-      width: 2,
-      height: window.innerHeight,
+    layer.draw();
+  }
+
+  function connectHexagons() {
+    const hexagonName1 = prompt('Inserisci il nome del primo esagono:');
+    const hexagonName2 = prompt('Inserisci il nome del secondo esagono:');
+
+    const hexagon1 = findHexagonByName(hexagonName1);
+    const hexagon2 = findHexagonByName(hexagonName2);
+
+    if (!hexagon1 || !hexagon2) {
+      alert('Uno o entrambi gli esagoni con i nomi forniti non sono presenti.');
+      return;
+    }
+
+    const arrow = new Konva.Arrow({
+      points: [hexagon1.x() + hexagon1.width() / 2, hexagon1.y(),
+               hexagon2.x() - hexagon2.width() / 2, hexagon2.y()],
+      pointerLength: 10,
+      pointerWidth: 10,
+      fill: 'red',
+      stroke: 'red',
+      strokeWidth: 2,
     });
-    layer.add(blueBorder);
 
-    groupShape = new Konva.Group();
-    layer.add(groupShape);
+    layer.add(arrow);
+    arrows = [...arrows, arrow];
+    layer.draw();
 
-    const initialShapeX = window.innerWidth * 0.2; // Different initial X position for hexagon
-    const initialShapeY = window.innerHeight / 2;
+    // Aggiorna l'oggetto arrowObject con i collegamenti
+    arrowObject.update(obj => {
+      obj[hexagonName1].link.push({ to: hexagonName2 });
+      obj[hexagonName2].link.push({ from: hexagonName1 });
+      return obj;
+    });
+  }
 
-    blueShape = setupShape(
-      new Konva.RegularPolygon({
-        x: initialShapeX,
-        y: initialShapeY,
-        sides: 6,
-        fill: 'blue',
-        radius: 30,
-        draggable: true,
-      }),
-      initialShapeX,
-      groupShape
-    );
+  function findHexagonByName(name) {
+    return hexagons.find(hexagon => hexagon.name() === name);
+  }
 
-    // New red triangle shape
-    const groupRedShape = new Konva.Group();
-    layer.add(groupRedShape);
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
-    const initialRedShapeX = window.innerWidth * 0.25; // Different initial X position for arrow
-    const initialRedShapeY = window.innerHeight / 2;
-
-    redShape = setupShape(
-      new Konva.RegularPolygon({
-        x: initialRedShapeX,
-        y: initialRedShapeY,
-        sides: 3,
-        fill: 'red',
-        radius: 30,
-        draggable: true,
-      }),
-      initialRedShapeX,
-      groupRedShape
-    );
+  // Pulisci l'abbonamento quando il componente viene distrutto
+  onDestroy(() => {
+    unsubscribe();
   });
 </script>
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #f0f0f0;
+  #container {
+    border: 1px solid #ccc;
   }
 </style>
 
 <div id="container"></div>
+<button on:click={createHexagon}>Crea Esagono</button>
+<button on:click={connectHexagons}>Collega Esagoni</button>
